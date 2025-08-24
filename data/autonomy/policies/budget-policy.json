@@ -1,0 +1,51 @@
+{
+  "budget_allocation": {
+    "monthly_budget": 5000,
+    "reserve_fund": 1000,
+    "allocation_strategy": "performance_weighted",
+    "reallocation_frequency": "weekly"
+  },
+  "category_budgets": {
+    "pseo_affiliate": {
+      "monthly_cap": 2000,
+      "cost_per_venture": 50,
+      "expected_roi": 3.5,
+      "max_ventures_per_month": 20
+    },
+    "etsy_templates": {
+      "monthly_cap": 1500,
+      "cost_per_venture": 25,
+      "expected_roi": 4.2,
+      "max_ventures_per_month": 30
+    },
+    "dropship_printful": {
+      "monthly_cap": 1000,
+      "cost_per_venture": 100,
+      "expected_roi": 2.8,
+      "max_ventures_per_month": 8
+    },
+    "stock_momentum": {
+      "monthly_cap": 500,
+      "cost_per_venture": 200,
+      "expected_roi": 1.5,
+      "max_ventures_per_month": 2
+    }
+  },
+  "performance_tracking": {
+    "roi_thresholds": {
+      "warning": 1.5,
+      "critical": 1.0,
+      "excellent": 3.0
+    },
+    "cost_controls": {
+      "max_venture_cost": 500,
+      "max_daily_spend": 200,
+      "emergency_stop_loss": 0.8
+    }
+  },
+  "funding_sources": {
+    "primary": "revenue_reinvestment",
+    "secondary": "affiliate_commissions",
+    "tertiary": "sponsor_revenue"
+  }
+} 

@@ -1,0 +1,22 @@
+{
+  "email": {
+    "cold-outreach": "Write a professional cold outreach email to [TARGET_ROLE] at [COMPANY] about [PRODUCT/SERVICE]. Keep it under 150 words, mention a specific pain point, and include a clear call-to-action.",
+    "follow-up": "Create a friendly follow-up email for [PROSPECT_NAME] who showed interest in [PRODUCT/SERVICE] during our [INTERACTION_TYPE] on [DATE]. Include a valuable resource or insight.",
+    "newsletter": "Draft a weekly newsletter for [AUDIENCE] about [TOPIC]. Include 3 key insights, 1 actionable tip, and 1 resource recommendation."
+  },
+  "social": {
+    "linkedin": "Create a LinkedIn post about [TOPIC] that positions [COMPANY/INDIVIDUAL] as a thought leader. Include a hook, valuable insight, and engagement question.",
+    "twitter": "Write a tweet about [TOPIC] that provides immediate value to [AUDIENCE]. Use relevant hashtags and keep it under 280 characters.",
+    "instagram": "Create an Instagram caption for [CONTENT_TYPE] about [TOPIC]. Include a compelling hook, valuable information, and call-to-action."
+  },
+  "planning": {
+    "daily": "Create a prioritized daily plan for [BUSINESS_GOAL]. Include 3 main tasks, 2 quick wins, and 1 learning objective.",
+    "weekly": "Develop a weekly strategy for [OBJECTIVE]. Break down into daily themes, key milestones, and success metrics.",
+    "quarterly": "Outline a quarterly roadmap for [BUSINESS_AREA]. Include goals, key initiatives, resource requirements, and success criteria."
+  },
+  "marketing": {
+    "landing-page": "Write compelling copy for a landing page about [PRODUCT/SERVICE]. Include headline, subheadline, 3 key benefits, and strong CTA.",
+    "ad-copy": "Create ad copy for [PLATFORM] promoting [PRODUCT/SERVICE]. Include primary message, 2-3 benefits, and compelling CTA.",
+    "case-study": "Outline a case study structure for [CLIENT] who achieved [RESULT] using [PRODUCT/SERVICE]. Include challenge, solution, and measurable outcomes."
+  }
+} 

@@ -1,0 +1,98 @@
+{
+  "topics": [
+    {
+      "id": "web-hosting-guide",
+      "title": "Best Web Hosting for Small Business in 2024",
+      "slug": "best-web-hosting-small-business",
+      "category": "hosting",
+      "keywords": ["web hosting", "small business hosting", "best hosting", "business website"],
+      "affiliate_products": ["bluehost", "siteground"],
+      "estimated_commission": 65,
+      "content_outline": [
+        "Introduction to Web Hosting",
+        "Types of Hosting (Shared, VPS, Dedicated)",
+        "Top Hosting Providers for Small Business",
+        "Features to Look For",
+        "Pricing Comparison",
+        "How to Choose the Right Host",
+        "Getting Started Guide"
+      ]
+    },
+    {
+      "id": "email-marketing-tools",
+      "title": "Email Marketing Tools That Convert in 2024",
+      "slug": "best-email-marketing-tools",
+      "category": "marketing",
+      "keywords": ["email marketing", "email tools", "marketing automation", "newsletter"],
+      "affiliate_products": ["convertkit", "mailchimp"],
+      "estimated_commission": 30,
+      "content_outline": [
+        "Why Email Marketing Still Works",
+        "Key Features to Look For",
+        "Top Email Marketing Platforms",
+        "Automation Capabilities",
+        "Analytics and Reporting",
+        "Pricing Plans",
+        "Getting Started Tips"
+      ]
+    },
+    {
+      "id": "design-tools-business",
+      "title": "Professional Design Tools for Non-Designers",
+      "slug": "design-tools-non-designers",
+      "category": "design",
+      "keywords": ["design tools", "graphic design", "business graphics", "canva"],
+      "affiliate_products": ["canva", "figma"],
+      "estimated_commission": 40,
+      "content_outline": [
+        "Why Design Matters for Business",
+        "Design Tools for Beginners",
+        "Canva Pro Features",
+        "Alternative Design Tools",
+        "Design Templates and Resources",
+        "Cost Comparison",
+        "Getting Started Guide"
+      ]
+    },
+    {
+      "id": "online-courses-business",
+      "title": "Best Online Courses to Grow Your Business Skills",
+      "slug": "best-online-courses-business",
+      "category": "education",
+      "keywords": ["online courses", "business skills", "professional development", "learning"],
+      "affiliate_products": ["coursera", "udemy"],
+      "estimated_commission": 45,
+      "content_outline": [
+        "Why Continuous Learning is Essential",
+        "Top Business Course Categories",
+        "Coursera vs Udemy Comparison",
+        "Free vs Paid Options",
+        "Course Selection Tips",
+        "Learning Strategies",
+        "Recommended Course Paths"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "hosting",
+      "name": "Web Hosting",
+      "description": "Hosting guides and comparisons"
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing Tools",
+      "description": "Marketing and automation tools"
+    },
+    {
+      "id": "design",
+      "name": "Design Tools",
+      "description": "Graphic design and visual tools"
+    },
+    {
+      "id": "education",
+      "name": "Online Learning",
+      "description": "Courses and skill development"
+    }
+  ]
+} 

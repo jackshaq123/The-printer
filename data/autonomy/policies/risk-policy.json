@@ -1,0 +1,35 @@
+{
+  "risk_management": {
+    "confidence_thresholds": {
+      "minConfidenceToSimulate": 0.55,
+      "minConfidenceToLaunch": 0.75,
+      "requireHumanAbove": 100
+    },
+    "budget_limits": {
+      "globalMonthlyCap": 5000,
+      "perCategoryCaps": {
+        "pseo_affiliate": 2000,
+        "etsy_templates": 1500,
+        "dropship_printful": 1000,
+        "stock_momentum": 500
+      }
+    },
+    "risk_categories": {
+      "low": ["pseo_affiliate", "etsy_templates"],
+      "medium": ["dropship_printful"],
+      "high": ["stock_momentum", "crypto_trading"]
+    }
+  },
+  "action_permissions": {
+    "autoAllowed": ["pseo_affiliate", "etsy_templates"],
+    "simulateOnly": ["stock_momentum", "dropship_printful"],
+    "requireApproval": ["crypto_trading", "real_estate"],
+    "blocked": ["gambling", "illegal_activities"]
+  },
+  "safety_checks": {
+    "maxDailyLaunches": 3,
+    "maxConcurrentVentures": 5,
+    "requiredCoolDownHours": 24,
+    "emergencyStopThreshold": 0.3
+  }
+} 

@@ -1,0 +1,72 @@
+{
+  "programs": [
+    {
+      "id": "hosting",
+      "name": "Web Hosting",
+      "description": "Reliable web hosting for businesses",
+      "partners": [
+        {
+          "name": "Bluehost",
+          "url": "https://bluehost.com/track/printer",
+          "commission": "65%",
+          "cookie_duration": "90 days",
+          "category": "hosting"
+        },
+        {
+          "name": "SiteGround",
+          "url": "https://siteground.com/go/printer",
+          "commission": "60%",
+          "cookie_duration": "60 days",
+          "category": "hosting"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "Business Tools",
+      "description": "Essential tools for business growth",
+      "partners": [
+        {
+          "name": "Canva Pro",
+          "url": "https://canva.com/affiliate/printer",
+          "commission": "40%",
+          "cookie_duration": "30 days",
+          "category": "design"
+        },
+        {
+          "name": "ConvertKit",
+          "url": "https://convertkit.com/affiliate/printer",
+          "commission": "30%",
+          "cookie_duration": "60 days",
+          "category": "email"
+        }
+      ]
+    },
+    {
+      "id": "courses",
+      "name": "Online Courses",
+      "description": "Professional development and skills training",
+      "partners": [
+        {
+          "name": "Coursera",
+          "url": "https://coursera.org/affiliate/printer",
+          "commission": "45%",
+          "cookie_duration": "120 days",
+          "category": "education"
+        },
+        {
+          "name": "Udemy",
+          "url": "https://udemy.com/affiliate/printer",
+          "commission": "97%",
+          "cookie_duration": "30 days",
+          "category": "education"
+        }
+      ]
+    }
+  ],
+  "tracking": {
+    "base_url": "/r/",
+    "click_log": "data/autonomy/runtime/affiliate-clicks.json",
+    "commission_tracking": "data/autonomy/runtime/commission-ledger.json"
+  }
+} 

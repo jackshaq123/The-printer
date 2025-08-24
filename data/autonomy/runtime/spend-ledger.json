@@ -1,0 +1,30 @@
+{
+  "current_month": "2024-01",
+  "total_spent": 0,
+  "budget_remaining": 5000,
+  "ventures": [],
+  "categories": {
+    "pseo_affiliate": {
+      "spent": 0,
+      "budget_remaining": 2000,
+      "ventures_count": 0
+    },
+    "etsy_templates": {
+      "spent": 0,
+      "budget_remaining": 1500,
+      "ventures_count": 0
+    },
+    "dropship_printful": {
+      "spent": 0,
+      "budget_remaining": 1000,
+      "ventures_count": 0
+    },
+    "stock_momentum": {
+      "spent": 0,
+      "budget_remaining": 500,
+      "ventures_count": 0
+    }
+  },
+  "transactions": [],
+  "last_updated": "2024-01-01T00:00:00.000Z"
+} 

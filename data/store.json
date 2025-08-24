@@ -1,0 +1,68 @@
+{
+  "products": [
+    {
+      "id": "pro-pack",
+      "name": "Pro Pack",
+      "description": "Complete business toolkit with templates, guides, and premium support",
+      "price": 997,
+      "currency": "usd",
+      "features": [
+        "50+ Business Templates",
+        "Premium AI Prompts",
+        "1-on-1 Strategy Session",
+        "Lifetime Updates",
+        "Priority Support"
+      ],
+      "stripe_price_id": "price_propack"
+    },
+    {
+      "id": "monthly-subscription",
+      "name": "Monthly Subscription",
+      "description": "Ongoing business support and fresh content monthly",
+      "price": 97,
+      "currency": "usd",
+      "billing_cycle": "monthly",
+      "features": [
+        "Monthly Content Calendar",
+        "Weekly Strategy Calls",
+        "Market Research Reports",
+        "Community Access",
+        "Cancel Anytime"
+      ],
+      "stripe_price_id": "price_monthly"
+    },
+    {
+      "id": "quarterly-plan",
+      "name": "Quarterly Plan",
+      "description": "Strategic business planning and execution support",
+      "price": 247,
+      "currency": "usd",
+      "billing_cycle": "quarterly",
+      "features": [
+        "Quarterly Strategy Review",
+        "Goal Setting & Tracking",
+        "Performance Analytics",
+        "Custom Templates",
+        "Email Support"
+      ],
+      "stripe_price_id": "price_quarterly"
+    }
+  ],
+  "categories": [
+    {
+      "id": "templates",
+      "name": "Business Templates",
+      "description": "Ready-to-use templates for common business tasks"
+    },
+    {
+      "id": "strategies",
+      "name": "Strategy Guides",
+      "description": "Step-by-step guides for business growth"
+    },
+    {
+      "id": "support",
+      "name": "Support Plans",
+      "description": "Ongoing business support and consultation"
+    }
+  ]
+} 
