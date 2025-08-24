@@ -14,9 +14,18 @@ export async function POST(request: NextRequest) {
 
     // Validate input
     if (!email || !password) {
-      return NextResponse.json({
-        error: 'Email and password are required'
+      return NextResponse.json({ 
+        error: 'Email and password are required' 
       }, { status: 400 })
+    }
+
+    // Check JWT secret configuration
+    const jwtSecret = process.env.JWT_SECRET
+    if (!jwtSecret) {
+      console.error('JWT_SECRET environment variable not configured')
+      return NextResponse.json({ 
+        error: 'Authentication service not configured. Please contact support.' 
+      }, { status: 500 })
     }
 
     // Initialize user storage
@@ -24,43 +33,45 @@ export async function POST(request: NextRequest) {
     await userStorage.initialize()
 
     // Get user by email
-    const user = await userStorage.getUserByEmail(email.toLowerCase())
+    const user = await userStorage.getUserByEmail(email)
     if (!user) {
-      return NextResponse.json({
-        error: 'Invalid credentials'
+      return NextResponse.json({ 
+        error: 'Invalid email or password' 
       }, { status: 401 })
     }
 
     // Check if user is verified
     if (!user.isVerified) {
-      return NextResponse.json({
-        error: 'Please verify your email before logging in'
+      return NextResponse.json({ 
+        error: 'Please verify your email before logging in' 
       }, { status: 401 })
     }
 
     // Verify password
     const isValidPassword = await userStorage.verifyPassword(email, password)
     if (!isValidPassword) {
-      return NextResponse.json({
-        error: 'Invalid credentials'
+      return NextResponse.json({ 
+        error: 'Invalid email or password' 
       }, { status: 401 })
     }
 
     // Update last login
-    await userStorage.updateUser(user.id, { lastLogin: new Date().toISOString() })
+    await userStorage.updateUser(user.id, {
+      lastLogin: new Date().toISOString()
+    })
 
     // Generate JWT token
     const token = sign(
-      {
-        userId: user.id,
+      { 
+        userId: user.id, 
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
+        isAdmin: user.email === 'admin@theprinter.com' // Simple admin check
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      jwtSecret,
       { expiresIn: '7d' }
     )
 
+    // Return user data and token
     return NextResponse.json({
       success: true,
       data: {
@@ -70,18 +81,21 @@ export async function POST(request: NextRequest) {
           firstName: user.firstName,
           lastName: user.lastName,
           company: user.company,
+          phone: user.phone,
           isVerified: user.isVerified,
+          createdAt: user.createdAt,
+          lastLogin: user.lastLogin,
           subscription: user.subscription
         },
         token,
-        message: 'Login successful'
+        expiresIn: '7d'
       }
     })
 
   } catch (error) {
     console.error('Login error:', error)
-    return NextResponse.json({
-      error: 'Failed to login',
+    return NextResponse.json({ 
+      error: 'Internal server error',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }

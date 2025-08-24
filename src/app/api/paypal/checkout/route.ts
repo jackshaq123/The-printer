@@ -25,9 +25,10 @@ export async function POST(request: NextRequest) {
     // Get the base URL from the request
     const baseUrl = new URL(request.url).origin
 
-    if (!process.env.PAYPAL_CLIENT_ID) {
+    // Check PayPal configuration
+    if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
       return NextResponse.json({ 
-        error: 'PayPal not configured' 
+        error: 'PayPal not configured. Please set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.' 
       }, { status: 500 })
     }
 
@@ -88,6 +89,12 @@ async function createPayPalOrder(params: {
   // Get PayPal access token
   const accessToken = await getPayPalAccessToken()
 
+  // Determine PayPal environment
+  const paypalMode = process.env.PAYPAL_MODE || 'sandbox'
+  const paypalBaseUrl = paypalMode === 'live' 
+    ? 'https://api-m.paypal.com' 
+    : 'https://api-m.sandbox.paypal.com'
+
   // Create order payload
   const orderPayload = {
     intent: 'CAPTURE',
@@ -108,140 +115,124 @@ async function createPayPalOrder(params: {
           {
             name: product.name,
             description: product.description,
+            quantity: quantity.toString(),
             unit_amount: {
               currency_code: 'USD',
               value: product.price.toFixed(2)
             },
-            quantity: quantity.toString(),
             category: 'DIGITAL_GOODS'
           }
         ]
       }
     ],
     application_context: {
-      brand_name: 'THE PRINTER',
-      landing_page: 'BILLING',
-      user_action: 'PAY_NOW',
       return_url: successUrl || `${baseUrl}/store/success`,
-      cancel_url: cancelUrl || `${baseUrl}/store/cancel`
+      cancel_url: cancelUrl || `${baseUrl}/store/cancel`,
+      brand_name: 'THE PRINTER',
+      landing_page: 'LOGIN',
+      user_action: 'PAY_NOW',
+      shipping_preference: 'NO_SHIPPING'
     }
   }
 
-  // Create order with PayPal
-  const response = await fetch('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+  // Create PayPal order
+  const orderResponse = await fetch(`${paypalBaseUrl}/v2/checkout/orders`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`,
-      'PayPal-Request-Id': `order_${Date.now()}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
     },
     body: JSON.stringify(orderPayload)
   })
 
-  if (!response.ok) {
-    const errorData = await response.json()
-    console.error('PayPal API error:', errorData)
-    throw new Error(`PayPal API error: ${response.status}`)
+  if (!orderResponse.ok) {
+    const errorData = await orderResponse.json()
+    console.error('PayPal order creation error:', errorData)
+    throw new Error(`PayPal order creation failed: ${errorData.error_description || 'Unknown error'}`)
   }
 
-  return await response.json()
+  const orderData = await orderResponse.json()
+  return orderData
 }
 
 async function getPayPalAccessToken(): Promise<string> {
-  const clientId = process.env.PAYPAL_CLIENT_ID!
-  const clientSecret = process.env.PAYPAL_CLIENT_SECRET || ''
+  const paypalMode = process.env.PAYPAL_MODE || 'sandbox'
+  const paypalBaseUrl = paypalMode === 'live' 
+    ? 'https://api-m.paypal.com' 
+    : 'https://api-m.sandbox.paypal.com'
 
-  // For now, we'll use a sandbox client ID if no secret is provided
-  // In production, you would need both client ID and secret
-  if (!clientSecret) {
-    // Using PayPal's demo credentials for sandbox
-    const demoAuth = Buffer.from(`${clientId}:`).toString('base64')
-    
-    const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Accept-Language': 'en_US',
-        'Authorization': `Basic ${demoAuth}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials'
-    })
-
-    if (!response.ok) {
-      // If auth fails, return a mock token for development
-      console.warn('PayPal auth failed, using mock token for development')
-      return 'mock_access_token_for_development'
-    }
-
-    const data = await response.json()
-    return data.access_token
-  }
-
-  // Production auth with both client ID and secret
-  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
-  
-  const response = await fetch('https://api-m.sandbox.paypal.com/v1/oauth2/token', {
+  const authResponse = await fetch(`${paypalBaseUrl}/v1/oauth2/token`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
-      'Accept-Language': 'en_US',
-      'Authorization': `Basic ${auth}`,
+      'Authorization': `Basic ${Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString('base64')}`,
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     body: 'grant_type=client_credentials'
   })
 
-  if (!response.ok) {
-    throw new Error('Failed to get PayPal access token')
+  if (!authResponse.ok) {
+    const errorData = await authResponse.json()
+    console.error('PayPal authentication error:', errorData)
+    throw new Error(`PayPal authentication failed: ${errorData.error_description || 'Unknown error'}`)
   }
 
-  const data = await response.json()
-  return data.access_token
+  const authData = await authResponse.json()
+  return authData.access_token
 }
 
-// Handle order capture when user completes payment
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const orderId = searchParams.get('orderId')
-    const action = searchParams.get('action')
+    const token = searchParams.get('token')
+    const payerId = searchParams.get('PayerID')
 
-    if (!orderId || action !== 'capture') {
-      return NextResponse.json({ 
-        error: 'Invalid request' 
-      }, { status: 400 })
+    if (!token) {
+      return NextResponse.json({ error: 'Missing order token' }, { status: 400 })
     }
 
-    // Get PayPal access token
-    const accessToken = await getPayPalAccessToken()
+    // Capture the PayPal order
+    const paypalMode = process.env.PAYPAL_MODE || 'sandbox'
+    const paypalBaseUrl = paypalMode === 'live' 
+      ? 'https://api-m.paypal.com' 
+      : 'https://api-m.sandbox.paypal.com'
 
-    // Capture the order
-    const response = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderId}/capture`, {
+    const accessToken = await getPayPalAccessToken()
+    
+    const captureResponse = await fetch(`${paypalBaseUrl}/v2/checkout/orders/${token}/capture`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
       }
     })
 
-    if (!response.ok) {
-      const errorData = await response.json()
+    if (!captureResponse.ok) {
+      const errorData = await captureResponse.json()
       console.error('PayPal capture error:', errorData)
       return NextResponse.json({ 
-        error: 'Failed to capture payment' 
+        error: 'Failed to capture payment',
+        details: errorData.error_description || 'Unknown error'
       }, { status: 500 })
     }
 
-    const captureData = await response.json()
+    const captureData = await captureResponse.json()
+    
+    // Here you would typically:
+    // 1. Update your database with the successful payment
+    // 2. Send confirmation emails
+    // 3. Grant access to purchased products
+    // 4. Log the transaction
 
     return NextResponse.json({
       success: true,
       data: {
         orderId: captureData.id,
         status: captureData.status,
-        captureId: captureData.purchase_units[0]?.payments?.captures[0]?.id,
-        amount: captureData.purchase_units[0]?.payments?.captures[0]?.amount
+        captureId: captureData.purchase_units[0]?.payments?.captures?.[0]?.id,
+        amount: captureData.purchase_units[0]?.amount?.value,
+        currency: captureData.purchase_units[0]?.amount?.currency_code
       }
     })
 

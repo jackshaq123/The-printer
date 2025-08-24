@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const openaiApiKey = process.env.OPENAI_API_KEY
     if (!openaiApiKey) {
       return NextResponse.json({ 
-        error: 'OpenAI API key not configured' 
+        error: 'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.' 
       }, { status: 500 })
     }
 
@@ -68,7 +68,9 @@ Always be helpful, professional, and focused on practical business outcomes.`
     let documentId = null
     if (saveToDocument) {
       try {
-        const docResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001'}/api/documents`, {
+        // Use the current request's origin for the documents API
+        const baseUrl = new URL(request.url).origin
+        const docResponse = await fetch(`${baseUrl}/api/documents`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -88,6 +90,7 @@ Always be helpful, professional, and focused on practical business outcomes.`
         }
       } catch (error) {
         console.error('Failed to save to document:', error)
+        // Don't fail the chat if document saving fails
       }
     }
 
@@ -104,7 +107,8 @@ Always be helpful, professional, and focused on practical business outcomes.`
   } catch (error) {
     console.error('Chat API error:', error)
     return NextResponse.json({ 
-      error: 'Internal server error' 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }
